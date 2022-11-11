@@ -1,0 +1,2 @@
+﻿Name,DateOfBirth,Address,ID,Sex,WorkPlace,Position,Nationality,Password,IssuedDate,PhoneNumber,Income,StatusClient,Fico,Branch
+BaoBug,1/1/0001 12:00:00 AM,1,1,True,1,1,1,Baobug,1/1/0001 12:00:00 AM,1,1,True,1,1

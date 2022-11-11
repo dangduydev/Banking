@@ -1,0 +1,74 @@
+/Users/ngothanhthanh/Documents/Đại học chắc chắn cần/Năm 2/OOP-GitHub/Project/obj/Debug/net6.0/Project.csproj.AssemblyReference.cache
+/Users/ngothanhthanh/Documents/Đại học chắc chắn cần/Năm 2/OOP-GitHub/Project/obj/Debug/net6.0/Project.GeneratedMSBuildEditorConfig.editorconfig
+/Users/ngothanhthanh/Documents/Đại học chắc chắn cần/Năm 2/OOP-GitHub/Project/obj/Debug/net6.0/Project.AssemblyInfoInputs.cache
+/Users/ngothanhthanh/Documents/Đại học chắc chắn cần/Năm 2/OOP-GitHub/Project/obj/Debug/net6.0/Project.AssemblyInfo.cs
+/Users/ngothanhthanh/Documents/Đại học chắc chắn cần/Năm 2/OOP-GitHub/Project/obj/Debug/net6.0/Project.csproj.CoreCompileInputs.cache
+/Users/ngothanhthanh/Documents/Đại học chắc chắn cần/Năm 2/OOP-GitHub/Project/obj/Debug/net6.0/Project.dll
+/Users/ngothanhthanh/Documents/Đại học chắc chắn cần/Năm 2/OOP-GitHub/Project/obj/Debug/net6.0/refint/Project.dll
+/Users/ngothanhthanh/Documents/Đại học chắc chắn cần/Năm 2/OOP-GitHub/Project/obj/Debug/net6.0/Project.pdb
+/Users/ngothanhthanh/Documents/Đại học chắc chắn cần/Năm 2/OOP-GitHub/Project/bin/Debug/net6.0/Project
+/Users/ngothanhthanh/Documents/Đại học chắc chắn cần/Năm 2/OOP-GitHub/Project/bin/Debug/net6.0/Project.deps.json
+/Users/ngothanhthanh/Documents/Đại học chắc chắn cần/Năm 2/OOP-GitHub/Project/bin/Debug/net6.0/Project.runtimeconfig.json
+/Users/ngothanhthanh/Documents/Đại học chắc chắn cần/Năm 2/OOP-GitHub/Project/bin/Debug/net6.0/Project.dll
+/Users/ngothanhthanh/Documents/Đại học chắc chắn cần/Năm 2/OOP-GitHub/Project/bin/Debug/net6.0/Project.pdb
+/Users/ngothanhthanh/Documents/Đại học chắc chắn cần/Năm 2/OOP-GitHub/Project/obj/Debug/net6.0/Project.genruntimeconfig.cache
+/Users/ngothanhthanh/Documents/Đại học chắc chắn cần/Năm 2/OOP-GitHub/Project/obj/Debug/net6.0/ref/Project.dll
+C:\Users\nk\OneDrive\Desktop\gitt\Project\obj\Debug\net6.0\Project.csproj.AssemblyReference.cache
+C:\Users\nk\OneDrive\Desktop\gitt\Project\obj\Debug\net6.0\Project.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\nk\OneDrive\Desktop\gitt\Project\obj\Debug\net6.0\Project.AssemblyInfoInputs.cache
+C:\Users\nk\OneDrive\Desktop\gitt\Project\obj\Debug\net6.0\Project.AssemblyInfo.cs
+C:\Users\nk\OneDrive\Desktop\gitt\Project\obj\Debug\net6.0\Project.csproj.CoreCompileInputs.cache
+C:\Users\nk\OneDrive\Desktop\gitt\Project\obj\Debug\net6.0\Project.dll
+C:\Users\nk\OneDrive\Desktop\gitt\Project\obj\Debug\net6.0\refint\Project.dll
+C:\Users\nk\OneDrive\Desktop\gitt\Project\obj\Debug\net6.0\Project.pdb
+D:\Hoc lap trinh\C#\Project\bin\Debug\net6.0\Project.exe
+D:\Hoc lap trinh\C#\Project\bin\Debug\net6.0\Project.deps.json
+D:\Hoc lap trinh\C#\Project\bin\Debug\net6.0\Project.runtimeconfig.json
+D:\Hoc lap trinh\C#\Project\bin\Debug\net6.0\Project.dll
+D:\Hoc lap trinh\C#\Project\bin\Debug\net6.0\Project.pdb
+D:\Hoc lap trinh\C#\Project\obj\Debug\net6.0\Project.csproj.AssemblyReference.cache
+D:\Hoc lap trinh\C#\Project\obj\Debug\net6.0\Project.GeneratedMSBuildEditorConfig.editorconfig
+D:\Hoc lap trinh\C#\Project\obj\Debug\net6.0\Project.AssemblyInfoInputs.cache
+D:\Hoc lap trinh\C#\Project\obj\Debug\net6.0\Project.AssemblyInfo.cs
+D:\Hoc lap trinh\C#\Project\obj\Debug\net6.0\Project.csproj.CoreCompileInputs.cache
+D:\Hoc lap trinh\C#\Project\obj\Debug\net6.0\Project.dll
+D:\Hoc lap trinh\C#\Project\obj\Debug\net6.0\refint\Project.dll
+D:\Hoc lap trinh\C#\Project\obj\Debug\net6.0\Project.pdb
+D:\Hoc lap trinh\C#\Project\obj\Debug\net6.0\Project.genruntimeconfig.cache
+D:\Hoc lap trinh\C#\Project\obj\Debug\net6.0\ref\Project.dll
+D:\Hoc lap trinh\C#\Project\bin\Debug\net6.0\LINQtoCSV.dll
+D:\Hoc lap trinh\C#\Project\obj\Debug\net6.0\Project.csproj.CopyComplete
+C:\Users\nk\Downloads\Project-master\obj\Debug\net6.0\Project.csproj.AssemblyReference.cache
+C:\Users\nk\Downloads\Project-master\obj\Debug\net6.0\Project.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\nk\Downloads\Project-master\obj\Debug\net6.0\Project.AssemblyInfoInputs.cache
+C:\Users\nk\Downloads\Project-master\obj\Debug\net6.0\Project.AssemblyInfo.cs
+C:\Users\nk\Downloads\Project-master\obj\Debug\net6.0\Project.csproj.CoreCompileInputs.cache
+C:\Users\nk\Downloads\Project-master\obj\Debug\net6.0\Project.dll
+C:\Users\nk\Downloads\Project-master\obj\Debug\net6.0\refint\Project.dll
+C:\Users\nk\Downloads\Project-master\obj\Debug\net6.0\Project.pdb
+C:\Users\nk\Downloads\Project-master\bin\Debug\net6.0\Project.exe
+C:\Users\nk\Downloads\Project-master\bin\Debug\net6.0\Project.deps.json
+C:\Users\nk\Downloads\Project-master\bin\Debug\net6.0\Project.runtimeconfig.json
+C:\Users\nk\Downloads\Project-master\bin\Debug\net6.0\Project.dll
+C:\Users\nk\Downloads\Project-master\bin\Debug\net6.0\Project.pdb
+C:\Users\nk\Downloads\Project-master\bin\Debug\net6.0\LINQtoCSV.dll
+C:\Users\nk\Downloads\Project-master\obj\Debug\net6.0\Project.csproj.CopyComplete
+C:\Users\nk\Downloads\Project-master\obj\Debug\net6.0\Project.genruntimeconfig.cache
+C:\Users\nk\Downloads\Project-master\obj\Debug\net6.0\ref\Project.dll
+C:\Users\ICT\Downloads\Project-master\bin\Debug\net6.0\Project.exe
+C:\Users\ICT\Downloads\Project-master\bin\Debug\net6.0\Project.deps.json
+C:\Users\ICT\Downloads\Project-master\bin\Debug\net6.0\Project.runtimeconfig.json
+C:\Users\ICT\Downloads\Project-master\bin\Debug\net6.0\Project.dll
+C:\Users\ICT\Downloads\Project-master\bin\Debug\net6.0\Project.pdb
+C:\Users\ICT\Downloads\Project-master\bin\Debug\net6.0\LINQtoCSV.dll
+C:\Users\ICT\Downloads\Project-master\obj\Debug\net6.0\Project.csproj.AssemblyReference.cache
+C:\Users\ICT\Downloads\Project-master\obj\Debug\net6.0\Project.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\ICT\Downloads\Project-master\obj\Debug\net6.0\Project.AssemblyInfoInputs.cache
+C:\Users\ICT\Downloads\Project-master\obj\Debug\net6.0\Project.AssemblyInfo.cs
+C:\Users\ICT\Downloads\Project-master\obj\Debug\net6.0\Project.csproj.CoreCompileInputs.cache
+C:\Users\ICT\Downloads\Project-master\obj\Debug\net6.0\Project.csproj.CopyComplete
+C:\Users\ICT\Downloads\Project-master\obj\Debug\net6.0\Project.dll
+C:\Users\ICT\Downloads\Project-master\obj\Debug\net6.0\refint\Project.dll
+C:\Users\ICT\Downloads\Project-master\obj\Debug\net6.0\Project.pdb
+C:\Users\ICT\Downloads\Project-master\obj\Debug\net6.0\Project.genruntimeconfig.cache
+C:\Users\ICT\Downloads\Project-master\obj\Debug\net6.0\ref\Project.dll
