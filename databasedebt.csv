@@ -1,0 +1,5 @@
+﻿ID,StatusCard,AccountNumber,Type,SettlementDate,Miniumpayment,Maximumpayment,NoInterestPaymentDate,IsPayment,Ispayontime
+1,False,001,VisaStandard,11/13/2022 5:41:19 PM,0,0,11/28/2022 5:41:19 PM,False,False
+1,False,001,VisaStandard,11/1/2022 12:00:00 AM,0,0,11/16/2022 12:00:00 AM,False,False
+1,False,001,VisaStandard,11/13/2022 5:41:29 PM,0,0,11/28/2022 5:41:29 PM,False,False
+1,False,001,VisaStandard,11/1/2022 12:00:00 AM,0,0,11/16/2022 12:00:00 AM,False,False

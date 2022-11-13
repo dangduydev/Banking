@@ -3,7 +3,6 @@ public class PaymentCard : Function
     private string pin;
     public string Pin
     { get; set; }
-
     private bool statuscard;
     public bool StatusCard
     { get; set; }
@@ -28,14 +27,15 @@ public class PaymentCard : Function
     }
     public DateTime StartTime;
     public List<TransactionHistory> Histories = new List<TransactionHistory>();
+    public Client AA;
     public PaymentCard(string type,string accountnumber,string id,string pin,List<TransactionHistory> histories,Client A,string description) : base(type,accountnumber,id,A,description)
     {
         Pin = pin;
         StatusCard = true;
+        AA = A;
         StartTime = DateTime.Now;
         AnnualFeesYear = DateTime.Now;
         this.Histories = histories;
-
     }
     public bool CheckAccountStatus()
     {
@@ -51,6 +51,4 @@ public class PaymentCard : Function
     }
     ~PaymentCard()
     { }
-
 }
-

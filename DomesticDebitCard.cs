@@ -13,19 +13,21 @@ class DomesticDebitCard : PaymentCard
     protected static decimal SoTienDaRut;
     protected static decimal SoTienDaChuyen;
     private DateTime Last;
-    
-    public DomesticDebitCard(string type,string accountnumber,string id, string pin,List<TransactionHistory> Histories,Client A,string description) : base(type,accountnumber,id,pin,Histories,A,description)
+
+    public DomesticDebitCard(string type, string accountnumber, string id, string pin, List<TransactionHistory> Histories, Client A, string description) : base(type, accountnumber, id, pin, Histories, A, description)
     {
         CardBalance = 50000;
-        // Last = DateTime.Now;
     }
-
-    // thiếu hàm nhận tiền từ 1 thẻ Debit của 1 khách hàng khác
-    public void AccountRecharge(decimal x, string transactioncontent)// nạp tiền vô thẻ 
+    public bool AccountRecharge(decimal x, string transactioncontent)// nạp tiền vô thẻ 
     {
+        if (!StatusCard)
+        {
+            return false;
+        }
         CardBalance += x;
-        TransactionHistory transactionHistory = new TransactionHistory(DateTime.Now, this.AccountNumber, false, Type, StatusCard, "Nap tien", x, CardBalance,this.ID);
+        TransactionHistory transactionHistory = new TransactionHistory(DateTime.Now, this.AccountNumber, false, Type, StatusCard, "Nap tien", x, CardBalance, this.ID);
         this.Histories.Add(transactionHistory);
+        return true;
     }
     public void ResetLimit() //Kiểm tra lần giao dịch cuối cùng đã qua ngày mới chưa
     {
@@ -48,23 +50,21 @@ class DomesticDebitCard : PaymentCard
             CardBalance -= x;
             SoTienDaRut += x;
             Last = DateTime.Now;
-            TransactionHistory transactionHistory = new TransactionHistory(DateTime.Now, this.AccountNumber, true, Type, StatusCard, "Rut tien tai ATM", x, CardBalance,this.ID);
+            TransactionHistory transactionHistory = new TransactionHistory(DateTime.Now, this.AccountNumber, true, Type, StatusCard, "Rut tien tai ATM", x, CardBalance, this.ID);
             this.Histories.Add(transactionHistory);
             CardBalance -= 1100;   //1100 là phí rút tại ATM
-            TransactionHistory phi = new TransactionHistory(DateTime.Now, this.AccountNumber, true, Type, StatusCard, "Phi rut tien", 1100, CardBalance,this.ID);
+            TransactionHistory phi = new TransactionHistory(DateTime.Now, this.AccountNumber, true, Type, StatusCard, "Phi rut tien", 1100, CardBalance, this.ID);
             this.Histories.Add(phi);
-
             return true;
         }
         return false;
-
     }
     public bool WithdrawPOS(decimal x)
     {
         if (CheckBalanceMinimun(x) && StatusCard == true)
         {
             CardBalance -= x;
-            TransactionHistory transactionHistory = new TransactionHistory(DateTime.Now, this.AccountNumber, true, Type, StatusCard, "Rut tien tai POS", x, CardBalance,this.ID);
+            TransactionHistory transactionHistory = new TransactionHistory(DateTime.Now, this.AccountNumber, true, Type, StatusCard, "Rut tien tai POS", x, CardBalance, this.ID);
             this.Histories.Add(transactionHistory);
             return true;
         }
@@ -83,7 +83,7 @@ class DomesticDebitCard : PaymentCard
             CardBalance -= x;
             Last = DateTime.Now;
             SoTienDaChuyen += x;
-            TransactionHistory transactionHistory = new TransactionHistory(DateTime.Now, this.AccountNumber, true, Type, StatusCard, "", x, CardBalance,this.ID);
+            TransactionHistory transactionHistory = new TransactionHistory(DateTime.Now, this.AccountNumber, true, Type, StatusCard, "", x, CardBalance, this.ID);
             this.Histories.Add(transactionHistory);
             return true;
         }
@@ -94,21 +94,22 @@ class DomesticDebitCard : PaymentCard
         if (CheckBalanceMinimun(x))// && StatusCard == true)
         {
             CardBalance -= x;
-            TransactionHistory transactionHistory = new TransactionHistory(DateTime.Now, this.AccountNumber, true, Type, StatusCard, transactioncontent, x, CardBalance,this.ID);
+            TransactionHistory transactionHistory = new TransactionHistory(DateTime.Now, this.AccountNumber, true, Type, StatusCard, transactioncontent, x, CardBalance, this.ID);
             this.Histories.Add(transactionHistory);
             return true;
         }
         return false;
     }
-    public void ReceiveMoney(decimal x, string transactioncontent)
+    public bool ReceiveMoney(decimal x, string transactioncontent)
     {
+        if (!StatusCard)
+        {
+            return false;
+        }
         CardBalance += x;
-        TransactionHistory transactionHistory = new TransactionHistory(DateTime.Now, this.AccountNumber, false, Type, StatusCard, transactioncontent, x, CardBalance,this.ID);
+        TransactionHistory transactionHistory = new TransactionHistory(DateTime.Now, this.AccountNumber, false, Type, StatusCard, transactioncontent, x, CardBalance, this.ID);
         this.Histories.Add(transactionHistory);
-    }
-    public void SoDuTaiKhoan()
-    {
-        Console.WriteLine(CardBalance);
+        return true;
     }
     public bool CheckBalanceMinimun(decimal money)
     {
@@ -123,23 +124,35 @@ class DomesticDebitCard : PaymentCard
         if (CheckBalanceMinimun(x) && StatusCard == true)
         {
             CardBalance -= x;
-            TransactionHistory transactionHistory = new TransactionHistory(DateTime.Now, this.AccountNumber, true, Type, StatusCard, transactioncontent, x, CardBalance,this.ID);
+            TransactionHistory transactionHistory = new TransactionHistory(DateTime.Now, this.AccountNumber, true, Type, StatusCard, transactioncontent, x, CardBalance, this.ID);
             this.Histories.Add(transactionHistory);
             return true;
         }
         return false;
     }
-    public void MonthlyInterest()// tính tiền đã thanh toán trong tháng
+    public void MonthlyInterest()
     {
-        decimal kq = 0;
         DateTime C = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);// ngày đầu của tháng hiện tại
         DateTime D = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
         D.AddMonths(1);
         D.AddDays(-1);// ngày cuối của tháng hiện tại
-
         if (DateTime.Now == D)
         {
-            CardBalance += CardBalance * 0.01M;
+            decimal x = CardBalance * 0.01M;
+            CardBalance += x;
+            TransactionHistory transactionHistory = new TransactionHistory(DateTime.Now, this.AccountNumber, false, Type, StatusCard, "lai hang thang", x, CardBalance, this.ID);
+            this.Histories.Add(transactionHistory);
+        }
+    }
+    public void AutomaticDeductionOfAnnualFee()
+    {
+        if (DateTime.Now == this.AnnualFeesYear.AddYears(1))
+        {
+            CardBalance -= this.AnnualFees;
+            this.AnnualFeesYear = new DateTime(this.StartTime.Year + 1, this.StartTime.Month, this.StartTime.Day);
+            TransactionHistory transactionHistory = new TransactionHistory(DateTime.Now, this.AccountNumber, true, this.Type
+               , this.StatusCard, "Trừ phí thường niên", this.AnnualFees, this.CardBalance, this.ID);
+            Histories.Add(transactionHistory);
         }
     }
     public bool ForeignCurrencyTrading(decimal x, string typecurrrency)
@@ -148,7 +161,7 @@ class DomesticDebitCard : PaymentCard
             {
                 "VND","AUD","CAD","CHF","EUR","GBP","HKD","JPY","SGD","USD"
             };
-        if (typecurrrency == ListTypeCurrency[0]) x*= 1;
+        if (typecurrrency == ListTypeCurrency[0]) x *= 1;
         else
             if (typecurrrency == ListTypeCurrency[1]) x *= 15478;
         else
@@ -170,7 +183,7 @@ class DomesticDebitCard : PaymentCard
         if (CheckBalanceMinimun(x) && StatusCard == true)
         {
             CardBalance -= x;
-            TransactionHistory transactionHistory = new TransactionHistory(DateTime.Now, this.AccountNumber, true, Type, StatusCard, "Doi tien ngoai te", x, CardBalance,this.ID);
+            TransactionHistory transactionHistory = new TransactionHistory(DateTime.Now, this.AccountNumber, true, Type, StatusCard, "Doi tien ngoai te", x, CardBalance, this.ID);
             this.Histories.Add(transactionHistory);
             return true;
         }
@@ -178,14 +191,15 @@ class DomesticDebitCard : PaymentCard
     }
     public void XuatThongTinThe()
     {
-        Console.WriteLine("Type: "+this.Type);
-        Console.WriteLine("Account Number: "+this.AccountNumber);
-        Console.WriteLine("Card Balance: "+this.CardBalance);
+        Console.WriteLine("Type: " + this.Type);
+        Console.WriteLine("Account Number: " + this.AccountNumber);
+        Console.WriteLine("Card Balance: " + this.CardBalance);
     }
+    ~DomesticDebitCard() { }
 }
 class NapasSuccessCard : DomesticDebitCard
 {
-    public NapasSuccessCard(string type,string accountnumber,string id, string pin,List<TransactionHistory> Histories,Client A,string description) : base(type,accountnumber,id,pin,Histories,A,description)
+    public NapasSuccessCard(string type, string accountnumber, string id, string pin, List<TransactionHistory> Histories, Client A, string description) : base(type, accountnumber, id, pin, Histories, A, description)
     {
         Type = "Napas Success";
         hanMucRutTienTrenNgay = 25000000;
@@ -194,12 +208,13 @@ class NapasSuccessCard : DomesticDebitCard
         hanMucRutTienTrenLanCungNH = 5000000;
         hanMucRutTienTrenLanKhacNH = 3000000;
         hanMucChuyenKhoanTrenLan = 2500000;
+        AnnualFees = 12000;
     }
     ~NapasSuccessCard() { }
 }
 class NapasSuccessPlusCard : DomesticDebitCard
 {
-    public NapasSuccessPlusCard(string type,string accountnumber,string id, string pin,List<TransactionHistory> Histories,Client A,string description) : base(type,accountnumber,id,pin,Histories,A,description)
+    public NapasSuccessPlusCard(string type, string accountnumber, string id, string pin, List<TransactionHistory> Histories, Client A, string description) : base(type, accountnumber, id, pin, Histories, A, description)
     {
         Type = "Napas Success Plus";
         hanMucRutTienTrenNgay = 50000000;
@@ -208,7 +223,7 @@ class NapasSuccessPlusCard : DomesticDebitCard
         hanMucRutTienTrenLanCungNH = 5000000;
         hanMucRutTienTrenLanKhacNH = 3000000;
         hanMucChuyenKhoanTrenLan = 25000000;
-        AnnualFees = 12000;
+        AnnualFees = 50000;
         InternetLimit = 5000000;
     }
     ~NapasSuccessPlusCard() { }

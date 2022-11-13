@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Net.NetworkInformation;
-
 public class Client
 {
     private string name;
@@ -106,6 +105,10 @@ public class Client
         #endregion
         return issueddate > DateTime.Now;
     }
+    public void LockClient()
+    {
+        this.StatusClient = false;
+    }
     public bool ChangePassword(string OldPassword, string NewPassWord)
     {
         if (this.Password == OldPassword)
@@ -118,7 +121,6 @@ public class Client
             return false;
         }
     }
-
     public void ExportInformation()
     {
         Console.WriteLine($"Name: {Name}");
@@ -135,6 +137,4 @@ public class Client
         //xuất fico
         // xuất các thẻ 
     }
-
-
 }

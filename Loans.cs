@@ -1,10 +1,13 @@
 public class Loans : Function
 {
     private decimal limit, percent, loansBadDebit, numberofpayment, debt; //
-    private int term;
+    private int term, months;
     private DateTime datetimeloan, datepayment, datepayeverymonth; //payment - day payment, Term - limit month loan
     private bool isbaddebt;
     private int numberofloans;
+    private bool isLoan;
+    private decimal sotiendavay;
+    public int Months { get; set; }
     public bool Isbaddebt { get; set; }// có phải nợ xấu hay ko
     public decimal Debt { get; set; }// dư nợ
     public decimal kq { get; set; }
@@ -17,26 +20,51 @@ public class Loans : Function
     public decimal LoansBadDebit { get; set; }// số tiền nợ xấu
     public List<DebtHistory> LoansHistoryDebitList = new List<DebtHistory>();// lịch sử ghi nợ
     public List<TransactionHistory> Histories = new List<TransactionHistory>();
-    public Loans(string type, string accountnumber, string id, Client A, string description, List<TransactionHistory> histories, List<DebtHistory> listDebt)
+    public Loans(string type, string accountnumber, string id,
+        Client A, string description, int months, decimal Debt,
+        List<TransactionHistory> histories, List<DebtHistory> listDebt)
                 : base(type, accountnumber, id, A, description)
     {
         DateTimeloan = DateTime.Now;
-        // Datepayeverymonth = DateTime.Now;
         Isbaddebt = false;
         Histories = histories;
         LoansHistoryDebitList = listDebt;
+        Months = months;
+        DatePayment = DateTimeloan.AddMonths(months);
+        isLoan = false;
     }
-
+    public bool Init()
+    {
+        this.Debt = Debt;
+        if (CheckLoanLimit() && CheckMonthLimit())
+        {
+            TransactionHistory loansTransaction = new TransactionHistory(DateTime.Now, Type, false, Type, true, "Vay", Debt, Debt, this.ID);// lịch sử giao dịch
+            Histories.Add(loansTransaction);
+            // lưu lại lịch sử nợ
+            decimal kq = Debt / Convert.ToDecimal(Months) * (1 + Percent);
+            for (int i = 0; i < this.Months; i++)
+            {
+                DebtHistory tmp = new(DateTimeloan.AddMonths(i + 1), kq, this.ID, "", this.Type);
+                LoansHistoryDebitList.Add(tmp);
+            }
+            isLoan = true;
+            return true;
+        }
+        return false;
+    }
     public bool CheckLoanLimit()
     {
         return (this.Debt <= this.Limit);
     }
-
     public decimal CheckBadDebt() //nợ xấu có nghĩa là số tiền còn lại trong kỳ chưa thanh toán
     {
         return 0;
     }
 
+    public bool CheckMonthLimit()
+    {
+        return (this.Months <= this.Term);
+    }
     public int CheckFico(double Fico)
     {
         int type;
@@ -45,7 +73,6 @@ public class Loans : Function
         else { type = 3; }
         return type;
     }
-
     public int CheckIncome(decimal Income)
     {
         int type;
@@ -55,22 +82,20 @@ public class Loans : Function
         return type;
     }
     // vay chuyển khoản
-    public bool Transferloans(decimal x, int Term)// vay
+    public bool Transferloans(decimal x)// vay thấu chi
     {
         string[] ListLoan = { "Unsecured Loan", "Mortage Loan", "Overdraft Loan", "Installment Loan" };
-        if ((this.Type != ListLoan[2]) && Debt > 0) return false;
-        Debt = x;
-        kq = Debt / Convert.ToDecimal(Term) * (1 + Percent); //số tiền cần trả mỗi tháng
-        DatePayment = DateTime.Now.AddMonths(Term);
-
-        TransactionHistory loansTransaction = new TransactionHistory(DateTime.Now, Type, false, Type, true, "Vay", x, Debt, this.ID);// lịch sử giao dịch
+        if ((this.Type != ListLoan[2]) && Debt >= 0 && x + Debt < Limit) return false;
+        sotiendavay += x;
+        Debt += x;
+        DatePayment = DateTimeloan.AddMonths(Months);
+        TransactionHistory loansTransaction = new TransactionHistory(DateTime.Now, Type, false, Type, true, "Vay thau chi", x, Debt, this.ID);// lịch sử giao dịch
         Histories.Add(loansTransaction);
         // lưu lại lịch sử nợ
-        for (int i = 0; i < this.Term; i++)
-        {
-            DebtHistory tmp = new(DateTimeloan.AddMonths(i + 1), kq, this.ID, "", this.Type);
-            LoansHistoryDebitList.Add(tmp);
-        }
+        decimal kq = Debt * (1 + Percent);
+        DebtHistory tmp = new(DateTimeloan.AddMonths(1), kq, this.ID, "", this.Type);
+        LoansHistoryDebitList.Add(tmp);
+        isLoan = true;
         return true;
     }
     public void Paymentloans(decimal x)// thanh toán nợ
@@ -162,16 +187,16 @@ public class Loans : Function
         if (list.Count() > 0) this.Isbaddebt = true;
     }
     ~Loans() { }
-
 }
-
 class UnsecuredLoan : Loans
 {
-    public UnsecuredLoan(string type, string accountnumber, string id, Client A, string description, List<TransactionHistory> histories, List<DebtHistory> listDebt,
-        decimal Debt, int months, int Fico) : base(type, accountnumber, id, A, description, histories, listDebt)
+    public UnsecuredLoan(
+        string type, string accountnumber, string id, Client A, string description,
+        List<TransactionHistory> histories, List<DebtHistory> listDebt,
+        decimal Debt, int months, int Fico) : base(type, accountnumber, id, A,
+            description, months, Debt, histories, listDebt)
     {
         Type = "Unsecured Loan";
-        DateTimeloan = DateTime.Now;
         if (CheckFico(Fico) == 2)
         {
             Limit = 30000000;
@@ -190,42 +215,51 @@ class UnsecuredLoan : Loans
             Percent = 0.2m;
             Term = 12;
         }
+        this.Debt = Debt;
     }
     ~UnsecuredLoan() { }
 }
 
 class MortageLoan : Loans
 {
-    public MortageLoan(string type, string accountnumber, string id, Client A, string description, List<TransactionHistory> histories, List<DebtHistory> listDebt,decimal totalasset)
-                    : base(type, accountnumber, id, A, description, histories, listDebt)
+    public MortageLoan(string type, string accountnumber, string id, Client A,
+        string description, int months, decimal Debt,
+        List<TransactionHistory> histories, List<DebtHistory> listDebt, decimal totalasset)
+                    : base(type, accountnumber, id, A, description, months, Debt, histories, listDebt)
     {
         Limit = totalasset;
         Percent = 0.125m;
-        DateTimeloan = DateTime.Now;
         Term = 60;
         Type = "Mortage Loan";
+        this.Debt = Debt;
+
     }
     ~MortageLoan() { }
 }
 
 class OverdraftLoan : Loans
 {
-    public OverdraftLoan(string type, string accountnumber, string id, Client A, string description, List<TransactionHistory> histories, List<DebtHistory> listDebt,decimal income)
-                : base(type, accountnumber, id, A, description, histories, listDebt)
+    public OverdraftLoan(string type, string accountnumber, string id,
+        Client A, string description, int months, decimal Debt,
+        List<TransactionHistory> histories, List<DebtHistory> listDebt, decimal income)
+                : base(type, accountnumber, id, A, description, months, Debt, histories, listDebt)
     {
         Limit = 5 * income;
         Percent = 0.1m;
         Term = 1;
+        Months = 1;
         Type = "Overdraft Loan";
-        DatePayment = DateTime.Now.AddMonths(1);
+        DatePayment = DateTimeloan.AddMonths(1);
     }
     ~OverdraftLoan() { }
 }
 
 class InstallmentLoan : Loans
 {
-    public InstallmentLoan(string type, string accountnumber, string id, Client A, string description, List<TransactionHistory> histories, List<DebtHistory> listDebt,decimal Income)
-                : base(type, accountnumber, id, A, description, histories, listDebt)
+    public InstallmentLoan(string type, string accountnumber,
+        string id, Client A, string description, int months, decimal Debt,
+        List<TransactionHistory> histories, List<DebtHistory> listDebt, decimal Income)
+                : base(type, accountnumber, id, A, description, months, Debt, histories, listDebt)
     {
         Type = "Installment Loan";
         DateTimeloan = DateTime.Now;
@@ -247,6 +281,7 @@ class InstallmentLoan : Loans
             Percent = 0.2m;
             Term = 12;
         }
+        this.Debt = Debt;
     }
     ~InstallmentLoan() { }
 }

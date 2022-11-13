@@ -10,7 +10,6 @@ public class TimeDeposit : SavingAccount
     {
         Minium = 1000000;
         TypeSaving = typesaving;
-        
     }
     public void Init()
     {
@@ -19,7 +18,7 @@ public class TimeDeposit : SavingAccount
                 , SavingDeposit, SavingDeposit,this.ID);
         Histories.Add(tmp1);
     }
-    public bool WithdrawPos(decimal x, int newterm)
+    public bool Withdraw(decimal x, int newterm)
     {
         if (DateTime.Now < this.DueDate)
         {
@@ -27,13 +26,12 @@ public class TimeDeposit : SavingAccount
             // có cập nhật lại
             if (x <= SavingDeposit)
             {
-                SavingDeposit -= x;
+                SavingDeposit -= x;// chuyển tiền vào debitcard
                 this.Interest = 0;
                 if (newterm > 0)
                 {
                     Expire(newterm);
                 }
-
                 TransactionHistory tmp = new TransactionHistory(DateTime.Now, AccountNumber, true, Type, true, "Rút tiền tiết kiêm" +
                 " tại quầy POS", x, SavingDeposit,this.ID);
                 Histories.Add(tmp);
@@ -46,7 +44,7 @@ public class TimeDeposit : SavingAccount
             this.AutoUpdateSavingDeposit();
             if (x <= SavingDeposit)
             {
-                SavingDeposit -= x;
+                SavingDeposit -= x;// chuyển tiền vào debitcard
                 this.Interest = 0;
                 // lưu lịch sử giao dịch
                 TransactionHistory tmp = new TransactionHistory(DateTime.Now, AccountNumber, true, Type, true, "Rút tiền tiết kiêm" +
@@ -55,9 +53,7 @@ public class TimeDeposit : SavingAccount
                 return true;
             }
             return false;
-
         }
-
     }
     // Dao han
     public void Expire(int term)
@@ -70,13 +66,12 @@ public class TimeDeposit : SavingAccount
       Nếu tự động gia hạn gốc và lãi: thì cứ qua 1 lần của kỳ hạn cả
       tiền gốc và lãi sẽ gộp lại sẽ tự động tiếp tục 1 lần kỳ hạn nữa với mứ
       c lãi suất như trước
-
      */
     public decimal CalInterestMoney()
     {
         return this.FindInterestPercent(this.Term) * this.SavingDeposit;
     }
-    public decimal AutoUpdateSavingDeposit()// tự cộng tiền lãi
+    public decimal AutoUpdateSavingDeposit()// tự cộng tiền lãi vào debit card
     {
         if (DueDate.Month == DateTime.Now.Month && DueDate.Day == DateTime.Now.Day && DueDate.Year == DateTime.Now.Year)
         {
@@ -108,7 +103,6 @@ public class TimeDeposit : SavingAccount
             }
             if (TypeSaving == 3)
             {
-
                 // lưu lại lịch sử giao dịch
                 decimal tmp = CalInterestMoney();
                 this.DueDate.AddMonths(this.Term);
@@ -122,4 +116,3 @@ public class TimeDeposit : SavingAccount
         return -1;
     }
 }
-

@@ -1,2 +1,4 @@
 ﻿Name,DateOfBirth,Address,ID,Sex,WorkPlace,Position,Nationality,Password,IssuedDate,PhoneNumber,Income,StatusClient,Fico,Branch
-BaoBug,1/1/0001 12:00:00 AM,1,1,True,1,1,1,Baobug,1/1/0001 12:00:00 AM,1,1,True,1,1
+BaoBug,1/1/0001 12:00:00 AM,1,1,True,1,1,1,123456,1/1/0001 12:00:00 AM,1,100000000,True,10,1
+DuyCodeHay,1/1/0001 12:00:00 AM,1,2,False,1,1,1,234567,1/1/0001 12:00:00 AM,1,10000000,True,0,1
+Bug,1/1/0001 12:00:00 AM,1,3,False,1,1,1,123456,1/1/0001 12:00:00 AM,1,1,False,1,1

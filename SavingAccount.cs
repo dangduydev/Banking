@@ -1,4 +1,4 @@
-public class SavingAccount :Function
+public class SavingAccount : Function
 {
     // So tien gui toi thieu doi voi moi loai
     // Cac loai ky han
@@ -28,16 +28,15 @@ public class SavingAccount :Function
     private decimal savingdeposit;
     public decimal SavingDeposit { get; set; }
     private int term;
-    public int Term{ get; set; }
-
+    public int Term { get; set; }
     private DateTime duedate;
-    public DateTime DueDate{ get; set; }
+    public DateTime DueDate { get; set; }
 
     private decimal interest;// tổng tiền lãi đã tích lũy
     public decimal Interest
     { get; set; }
     public List<TransactionHistory> Histories = new List<TransactionHistory>();
-    public SavingAccount(string type,string accountnumber,string description,string id,decimal savingdeposit, int term,List<TransactionHistory> histories,Client A) : base(type,accountnumber,id,A,description)
+    public SavingAccount(string type, string accountnumber, string description, string id, decimal savingdeposit, int term, List<TransactionHistory> histories, Client A) : base(type, accountnumber, id, A, description)
     {
         StartedDate = DateTime.Now;   //note
         SavingDeposit = savingdeposit;
@@ -45,16 +44,12 @@ public class SavingAccount :Function
         Histories = histories;
         DueDate = StartedDate.AddMonths(term);
     }
-
     ~SavingAccount()
-    {
-
-    }
+    { }
     public DateTime FindDueDate(int Term, DateTime StartedDate)
     {
         DateTime x = StartedDate.AddMonths(Term);
         return x;
-
     }
     public bool CheckMinimum()
     {
@@ -119,9 +114,12 @@ public class SavingAccount :Function
                     x = (decimal)TypeOfTerm.T16 / 100;
                     break;
                 }
-
         }
         return x;
     }
     // Xuaatrs thông tin của cái sổ
+    public void XuatThongTinSo()
+    {
+        Console.WriteLine("THANH THANH CHƯA LÀM XONG????");
+    }
 }

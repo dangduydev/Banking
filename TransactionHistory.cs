@@ -16,19 +16,14 @@ public class TransactionHistory
     public bool StatusCard { get; set; }
     private decimal transactionmoney;
     public decimal TransactionMoney { get; set; }
-
     private decimal cardbalance;
     public decimal CardBalance { get; set; }
-
     private string transactioncontent;
     public string TransactionContent { get; set; }
-
     private string accountnumber;
     public string AccountNumber { get; set; }
-
     private string type;
     public string Type { get; set; }
-
     public TransactionHistory() { }
     public TransactionHistory(DateTime daytrading, string accountnumber, bool transactiontype,
         string typecard, bool statuscard, string transactioncontent,
@@ -43,7 +38,6 @@ public class TransactionHistory
         TransactionMoney = transactionmoney;
         CardBalance = cardbalance;
         ID = id;
-
         //DayTrading,TransactionType,StatusCard,TransactionMoney,CardBalance,TransactionContent,Type,AccountNumber,Histories
     }
     public void XuatLichSuGD()

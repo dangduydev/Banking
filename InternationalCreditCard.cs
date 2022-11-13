@@ -48,7 +48,6 @@ class InternationalCreditCard : PaymentCard
     {
         get; set;
     }
-
     private decimal internetlimit;
     #region Deal Internet/Moto
     //Giao dịch Internet/MOTO
@@ -57,13 +56,11 @@ class InternationalCreditCard : PaymentCard
     {
         get; set;
     }
-
     private double creditinterestrate = 1.08;// lãi suất
     public double CreditInterestRate
     {
         get; set;
     }
-
     private decimal moneywithdrawn;
     public decimal MoneyWithDrawn
     {
@@ -99,7 +96,7 @@ class InternationalCreditCard : PaymentCard
         DebtHistoryList = ddebtHistoryList;
     }
     // update các thuộc tính qua mỗi tháng
-    public void UpdateEveryMonth()
+    public void UpdateEveryMonth()// chạy liên tục
     {
         if (DateTime.Now.Day == 1)
         {
@@ -112,21 +109,17 @@ class InternationalCreditCard : PaymentCard
                 {
                     this.BadDebit = true;
                 }
-
             }
         }
-
     }
     // rút tiền tại atm
     public bool WithdrawATM(decimal x, string pinn)
     {
         if (pinn != this.Pin) return false;
-
-
         if (x + this.MoneyWithDrawn <= this.CreditLimit &&
             StatusCard == true && x <= this.ATMLimit)
         {
-            CardBalance -= x + 1100;
+            CardBalance -= x;
 
             if (LastTrading.Month == DateTime.Now.Month)
             {
@@ -135,21 +128,22 @@ class InternationalCreditCard : PaymentCard
             if (LastTrading.Month < DateTime.Now.Month)
             {
                 this.MoneyWithDrawn = x;
-
             }
             LastTrading = DateTime.Now;
             TransactionHistory transactionHistory = new TransactionHistory(DateTime.Now, this.AccountNumber, true, this.Type
                 , this.StatusCard, "Rút tại atm", x, this.CardBalance, this.ID);
+            CardBalance -= 1100;
+            TransactionHistory transactionHistory1 = new TransactionHistory(DateTime.Now, this.AccountNumber, true, this.Type
+    , this.StatusCard, "Phí rút tại atm", 1100, this.CardBalance, this.ID);
             Histories.Add(transactionHistory);
+            Histories.Add(transactionHistory1);
             return true;
         }
-
         return false;
     }
     // rút tiền tại quầy pos
-    public bool WithdrawPOS(decimal x, string pinn)
+    public bool WithdrawPOS(decimal x)
     {
-        if (pinn != this.Pin) return false;
         if (x + this.MoneyWithDrawn <= this.CreditLimit && StatusCard == true &&
             x <= this.POSLimit)
         {
@@ -169,10 +163,8 @@ class InternationalCreditCard : PaymentCard
             Histories.Add(transactionHistory);
             return true;
         }
-
         return false;
     }
-
     // đổi tiền ngoại tệ
     public bool ForeignCurrencyTrading(decimal x, string typecurrrency)
     {
@@ -202,7 +194,7 @@ class InternationalCreditCard : PaymentCard
         if (x + this.MoneyWithDrawn <= this.CreditLimit && StatusCard == true &&
             x <= this.POSLimit)
         {
-            CardBalance -= x;
+            CardBalance += x;
             if (LastTrading.Month == DateTime.Now.Month)
             {
                 this.MoneyWithDrawn += x;
@@ -227,21 +219,10 @@ class InternationalCreditCard : PaymentCard
         {
             CardBalance += this.AnnualFees;
             this.AnnualFeesYear = new DateTime(this.StartTime.Year + 1, this.StartTime.Month, this.StartTime.Day);
+            TransactionHistory transactionHistory = new TransactionHistory(DateTime.Now, this.AccountNumber, true, this.Type
+               , this.StatusCard, "Trừ phí thường niên", this.AnnualFees, this.CardBalance, this.ID);
+            Histories.Add(transactionHistory);
         }
-    }
-
-    public decimal FindCreditCardBalance()//Tính số dư nợ (FindCreditCardBalance)
-    {
-        return CardBalance;
-    }
-    public void SoDuKhaDung()
-    {
-        Console.WriteLine(CardBalance);
-    }
-    //Xuất thông tin số dư nợ thẻ tín dụng cần thanh toán mỗi tháng (PrintMontlyStatement)
-    public void PrintMontlyStatement()
-    {
-        Console.WriteLine(this.CalMiniumPayment() / 5 * 100);
     }
     public decimal CalMiniumPayment()//Tính khoản thanh toán tối thiểu (MiniumPayment)
     {
@@ -253,7 +234,6 @@ class InternationalCreditCard : PaymentCard
 
         // chỉ tính được vào ngày cuối cùng của tháng hiện tại
         if (DateTime.Now.Day <= D.Day) return 0;
-
         var list = from tmp in Histories where tmp.TransactionType == false && tmp.DayTrading <= C && tmp.DayTrading >= D select tmp;
         foreach (var tmp in list)
         {
@@ -264,7 +244,6 @@ class InternationalCreditCard : PaymentCard
         kq = kq / 100 * 5;
         return kq;
     }
-
     public decimal CalPaymentMoney()// tính tiền đã thanh toán trong tháng
     {
         decimal kq = 0;
@@ -274,7 +253,6 @@ class InternationalCreditCard : PaymentCard
         D.AddDays(-1);// ngày cuối của tháng hiện tại
 
         // chỉ tính được vào ngày cuối cùng của tháng hiện tại
-        int i;
         var list = from tmp in Histories where tmp.DayTrading >= C && tmp.DayTrading <= D && tmp.TransactionType == true select tmp;
         foreach (var tmp in list)
         {
@@ -285,7 +263,11 @@ class InternationalCreditCard : PaymentCard
     // kiểm tra nợ xấu
     public void CheckBadDebit()
     {
-        decimal K = this.DebtHistoryList[this.DebtHistoryList.Count].Miniumpayment;
+        if (DebtHistoryList.Count() == 0)
+        {
+            return;
+        }
+        decimal K = this.DebtHistoryList[this.DebtHistoryList.Count - 1].Miniumpayment;
         if (this.CalPaymentMoney() >= K && this.BadDebit == false)
         {
             this.BadDebit = false;
@@ -294,7 +276,6 @@ class InternationalCreditCard : PaymentCard
         {
             this.BadDebit = true;
         }
-
     }
     // thanh toán hạn mức tính dụng
     public bool Payment(decimal x)
@@ -333,13 +314,9 @@ class InternationalCreditCard : PaymentCard
                     DebtHistoryList[i] = tmp;
                     break;
                 }
-
             }
-
         }
-
         return true;
-
     }
     public decimal CalInterestInOneMonth(int month, int year)
     // tính lãi suất trong 1 tháng hiện tại month = datetime.now.month \\ year = datetime.now.year
@@ -374,19 +351,15 @@ class InternationalCreditCard : PaymentCard
             {
                 kq += tmp.Maximumpayment / 100 * 5;
             }
-
         }
         this.CardBalance += kq + this.CalInterestInOneMonth(DateTime.Now.Month, DateTime.Now.Year);
         DebtHistory k = new(DateTime.Now, kq + this.CalInterestInOneMonth(DateTime.Now.Month, DateTime.Now.Year), this.ID, this.AccountNumber, this.Type);
         this.DebtHistoryList.Add(k);
-
     }
-
-
-    public bool ChangeLimitCredit(int x, int fico, decimal income)
+    public bool ChangeLimitCredit(decimal x, decimal income)
     {
         CheckBadDebit();
-        if ((this.BadDebit == true && fico <= -100) || (x > income * 5))
+        if ((this.BadDebit == true && AA.Fico <= -100) || (x > income * 5) || income < AA.Income)
             return false;
         TimeSpan days = DateTime.Now - this.StartTime;
         if (days.Days * 2 < 365) return false;
@@ -420,17 +393,13 @@ class VisaStandard : InternationalCreditCard
         this.ATMLimit = 15000000;
         this.InternetLimit = 5000000;
         this.IPOLimit = 100000;
-
         Type = "VisaStandard";
-
         this.CreditInterestRate = 0;
         this.Duedate = this.StartTime;
         this.Minimumpayment = 0;
-
     }
     ~VisaStandard()
     { }
-
 }
 class VisaGold : InternationalCreditCard
 {
@@ -438,20 +407,16 @@ class VisaGold : InternationalCreditCard
     public VisaGold(string type, string accountnumber, string id, string pin, List<TransactionHistory> Histories, List<DebtHistory> ddebtHistoryList, Client A, string description) : base(type, accountnumber, id, pin, Histories, ddebtHistoryList, A, description)
     {
         this.AnnualFees = 0;
-
         this.CreditLimit = 100000000;
         this.POSLimit = this.CreditLimit / 2;
         this.POGLimit = 100000000;
         this.ATMLimit = 50000000;
         this.InternetLimit = 5000000;
         this.IPOLimit = 200000;
-
         Type = "VisaGold";
-
         this.CreditInterestRate = 0;
         this.Duedate = this.StartTime;
         this.Minimumpayment = 0;
-
     }
     ~VisaGold()
     { }
@@ -463,16 +428,13 @@ class MastercardGold : InternationalCreditCard
     public MastercardGold(string type, string accountnumber, string id, string pin, List<TransactionHistory> Histories, List<DebtHistory> ddebtHistoryList, Client A, string description) : base(type, accountnumber, id, pin, Histories, ddebtHistoryList, A, description)
     {
         this.AnnualFees = 0;
-
         this.CreditLimit = 100000000;
         this.POSLimit = this.CreditLimit / 2;
         this.POGLimit = 100000000;
         this.ATMLimit = 50000000;
         this.InternetLimit = 5000000;
         this.IPOLimit = 200000;
-
         Type = "MastercardGold";
-
         this.CreditInterestRate = 0;
         this.Duedate = this.StartTime;
         this.Minimumpayment = 0;
@@ -487,70 +449,55 @@ class MastercardPlatinum : InternationalCreditCard
     public MastercardPlatinum(string type, string accountnumber, string id, string pin, List<TransactionHistory> Histories, List<DebtHistory> ddebtHistoryList, Client A, string description) : base(type, accountnumber, id, pin, Histories, ddebtHistoryList, A, description)
     {
         this.AnnualFees = 100000;
-
         this.CreditLimit = 200000000;
         this.POSLimit = this.CreditLimit / 2;
         this.POGLimit = 200000000;
         this.ATMLimit = 100000000;
         this.InternetLimit = 5000000;
         this.IPOLimit = 300000;
-
         Type = "MastercardPlatinum";
-
         this.CreditInterestRate = 0;
         this.Duedate = this.StartTime;
         this.Minimumpayment = 0;
-
     }
     ~MastercardPlatinum()
     { }
 }
 class JCBGold : InternationalCreditCard
 {
-
     public JCBGold(string type, string accountnumber, string id, string pin, List<TransactionHistory> Histories, List<DebtHistory> ddebtHistoryList, Client A, string description) : base(type, accountnumber, id, pin, Histories, ddebtHistoryList, A, description)
     {
         this.AnnualFees = 0;
-
         this.CreditLimit = 100000000;
         this.POSLimit = this.CreditLimit / 2;
         this.POGLimit = 100000000;
         this.ATMLimit = 50000000;
         this.InternetLimit = 5000000;
         this.IPOLimit = 300000;
-
         Type = "JCBUltimate";
-
         this.CreditInterestRate = 0;
         this.Duedate = this.StartTime;
         this.Minimumpayment = 0;
-
     }
     ~JCBGold()
     { }
 }
 class JCBUltimate : InternationalCreditCard
 {
-
     public JCBUltimate(string type, string accountnumber, string id, string pin, List<TransactionHistory> Histories, List<DebtHistory> ddebtHistoryList, Client A, string description) : base(type, accountnumber, id, pin, Histories, ddebtHistoryList, A, description)
     {
         this.AnnualFees = 0;
-
         this.CreditLimit = 200000000;
         this.POSLimit = this.CreditLimit / 2;
         this.POGLimit = 200000000;
         this.ATMLimit = 50000000;
         this.InternetLimit = 100000000;
         this.IPOLimit = 0;
-
         Type = "JCBUltimate";
-
         this.CreditInterestRate = 0;
         this.Duedate = this.StartTime;
         this.Minimumpayment = 0;
-
     }
     ~JCBUltimate()
     { }
-
 }

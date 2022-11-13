@@ -4,7 +4,6 @@ public class Function
     public string Type { get; set; }
     private string accountnumber;
     public string AccountNumber { get; set; }
-
     private string description;
     public string Description { get; set; }
     private string id;

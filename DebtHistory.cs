@@ -11,13 +11,10 @@ public class DebtHistory
     // nợ tín dụng
     private DateTime settlementdate;// ngày kết toán
     public DateTime SettlementDate { get; set; }
-
     private decimal miniumpayment;
     public decimal Miniumpayment { get; set; }  // hạn mức tối thiểu cần thanh toán
-
     private decimal maximumpayment;
     public decimal Maximumpayment { get; set; }  // hạn mức cần thanh toán
-
     private DateTime nointerestpaymentdate;
     /*
      hạn thanh toán cuối cùng cho bạn "trả nợ" để không bị tính 
@@ -27,7 +24,6 @@ public class DebtHistory
     {
         get; set;
     }
-    
     private bool ispayment;
     public bool IsPayment { get; set; }
 
@@ -45,5 +41,12 @@ public class DebtHistory
         ID = id;
         AccountNumber = accountnumber;
         Type = type;
+    }
+    public void XuatLichSuNo()
+    {
+            Console.WriteLine($"Account Number: {AccountNumber}");
+            Console.WriteLine($"Day trading: {SettlementDate.ToString("dd/MM/yyyy")}");
+            Console.WriteLine("Time trading: {0}:{1}:{2}", SettlementDate.Hour, SettlementDate.Minute, SettlementDate.Second);
+            Console.WriteLine($"Amount owed Money: +{Maximumpayment}");
     }
 }
